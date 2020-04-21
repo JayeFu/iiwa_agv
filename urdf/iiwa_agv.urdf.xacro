@@ -33,16 +33,16 @@
       <inertia ixx="${agv_mass}" ixy="0.0" ixz="0.0" iyy="${agv_mass}" iyz="0.0" izz="${agv_mass}" />
     </inertial>
     <visual>
-      <origin xyz="0 0 0" rpy="${PI/2.0} 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://gazebo_example/meshes/che.STL" />
+        <box size="1 0.5 0.36"/>
       </geometry>
       <material name="blue"/>
     </visual>
     <collision>
-      <origin xyz="0 0 0" rpy="${PI/2.0} 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://iiwa_agv/meshes/che.STL" />
+        <box size="1 0.5 0.36"/>
       </geometry>
     </collision>
   </link>
@@ -282,7 +282,7 @@
   <!-- joint list -->
 
   <joint name="${prefix}agv_to_base_joint" type="fixed">
-    <origin xyz="0 0 0.23" rpy="0 0 0" />
+    <origin xyz="0 0 0.18" rpy="0 0 0" />
     <parent link="${prefix}agv_link" />
     <child link="${prefix}base_link" />
   </joint>
