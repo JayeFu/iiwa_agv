@@ -25,6 +25,6 @@
     args="-urdf -model parallel_car -param robot_description"/>
 
   <!-- ros_control iiwa_agv launch file -->
-  <!--include file="$(find iiwa_agv)/launch/iiwa_agv_control.launch" /-->
+  <include file="$(find iiwa_agv)/launch/iiwa_agv_control.launch" />
 
 </launch>
