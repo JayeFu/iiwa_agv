@@ -18,13 +18,13 @@ def main():
     exe.init_pose()
 
     # go to target pose
-    exe.go_to_target_pose([0.315593518306, -0.0583244396675, 0.316494316795, -0.0258618760329, 0.313625004658, 0.104796584025, 0.310698981177])
+    # exe.go_to_target_pose([0.315593518306, -0.0583244396675, 0.316494316795, -0.0258618760329, 0.313625004658, 0.104796584025, 0.310698981177])
 
     # go to the last pose
     # exe.go_to_last_pose()
 
     # go to other joint trajectory points
-    # exe.send_trajectory()
+    exe.send_trajectory()
 
 
 

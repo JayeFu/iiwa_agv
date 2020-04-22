@@ -89,7 +89,6 @@ class Executor:
         # a goal to be sent to action server
         # this goal will contain all the joint trajectory points read from the txt file
         goal = FollowJointTrajectoryGoal()
-        goal.trajectory.header.stamp = rospy.Time.now() + rospy.Duration(1.0)
 
         # add joint name
         for idx in range(self._joint_num): 
@@ -104,11 +103,13 @@ class Executor:
                 trajPt.positions.append(self._joints_pos_dict[joint_name][idx+1])
                 trajPt.velocities.append(0.0)
             # time to reach the joint trajectory point specified
-            trajPt.time_from_start = rospy.Duration(secs=traj_idx+2)
+            trajPt.time_from_start = rospy.Duration(secs=self._time_list[idx+1])
             # add the joint trajectory point to the goal
             goal.trajectory.points.append(trajPt)
 
         rospy.loginfo("goal has {} points to reach".format(len(goal.trajectory.points)))
+
+        goal.trajectory.header.stamp = rospy.Time.now() + rospy.Duration(2.0)
 
         # send the goal to the action server
         self._action_client.send_goal(goal)

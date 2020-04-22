@@ -8,5 +8,6 @@ This package is for control of iiwa agv to track end-effector trajectories.
 
 # Current tasks
 - [x] Construct the urdf files for iiwa agv
-- [ ] Read the trajectory from `txt` files
+- [x] Read the trajectory from `txt` files
+- [ ] Resolve the problems of sending the traj pts at the same time
 - [ ] Create the velocity controllers for multiple joints
