@@ -23,6 +23,9 @@ def main():
     # go to the last pose
     # exe.go_to_last_pose()
 
+    # go to other joint trajectory points one by one
+    # exe.send_trajectory_one_by_one()
+
     # go to other joint trajectory points
     exe.send_trajectory()
 
