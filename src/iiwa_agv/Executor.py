@@ -16,7 +16,12 @@ from trajectory_msgs.msg import JointTrajectoryPoint
 class Executor:
 
     def __init__(self, file_path='../data/fwx_planned_trajectory.txt', action_ns='/iiwa/iiwa_controller/follow_joint_trajectory'):
-        
+        """The construtor function of Executor class
+
+        Keyword Arguments:
+            file_path {str} -- the path of the joint trajectory file, if in this package, relative path is better (default: {'../data/fwx_planned_trajectory.txt'})
+            action_ns {str} -- the action namespace, used for constructing the action client (default: {'/iiwa/iiwa_controller/follow_joint_trajectory'})
+        """
         # file path
         self._file_path = file_path
 
@@ -44,6 +49,8 @@ class Executor:
         rospy.loginfo("Server detected")
 
     def read_trajectory(self):
+        """Read time series, corresponding car pose and joint values at each time point
+        """
         with open(self._file_path,'r') as f:
             for line in f.readlines()[1:]:
                 # convert string to float
@@ -68,6 +75,8 @@ class Executor:
                     self._joints_pos_dict['joint_a'+str(idx+1)].append(time_slice[idx+4])
 
     def init_pose(self):
+        """Drive the arm to go to the first pose
+        """
 
         rospy.loginfo("Start initiating the pose")
 
@@ -99,6 +108,8 @@ class Executor:
         rospy.loginfo(self._action_client.get_result())
 
     def send_trajectory(self):
+        """Send a goal which contains all the trajectory points to the action server
+        """
 
         rospy.loginfo("Start going to other trajectory points")
 
@@ -144,6 +155,8 @@ class Executor:
         rospy.loginfo(self._action_client.get_result())
 
     def go_to_last_pose(self):
+        """Drive the arm to go to the last pose
+        """
         
         rospy.loginfo("Start going to the last pose")
 
@@ -177,6 +190,11 @@ class Executor:
         rospy.loginfo(self._action_client.get_result())
 
     def go_to_target_pose(self, target_joint_values):
+        """Drive the arm to go to the pose target pose specified by target_joint_values
+
+        Arguments:
+            target_joint_values {list} -- a list of double, each represents the value of the joint position
+        """
 
         rospy.loginfo("Start going to the target pose at {}".format(target_joint_values))
 
@@ -208,6 +226,9 @@ class Executor:
         rospy.loginfo(self._action_client.get_result())
 
     def send_trajectory_one_by_one(self):
+        """DIFFERENT from `send_trajectory`, send a goal which only contains ONE trajectory point to the action server, iterating for len(self._time_list)-1 times
+        """
+
         rospy.loginfo("Start going to other trajectory points one by one")
 
         time_last = rospy.Time.now()
@@ -259,6 +280,7 @@ class Executor:
             time_last = time_next
 
 
+            # uncomment raw_input() if you want to control the pace of sending goals to the action server
             # raw_input()
 
     def compute_base_velocity(self):
