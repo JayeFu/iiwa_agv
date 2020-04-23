@@ -36,12 +36,12 @@ class Executor:
         self._time_list = list()
 
         # action client
-        # self._action_client = actionlib.SimpleActionClient(action_ns, FollowJointTrajectoryAction)
+        self._action_client = actionlib.SimpleActionClient(action_ns, FollowJointTrajectoryAction)
 
         # wait for the action server until finally detecting
-        #rospy.loginfo("Start waiting for the action server")
-        # self._action_client.wait_for_server()
-        # rospy.loginfo("Server detected")
+        rospy.loginfo("Start waiting for the action server")
+        self._action_client.wait_for_server()
+        rospy.loginfo("Server detected")
 
     def read_trajectory(self):
         with open(self._file_path,'r') as f:
@@ -210,7 +210,8 @@ class Executor:
     def send_trajectory_one_by_one(self):
         rospy.loginfo("Start going to other trajectory points one by one")
 
-        
+        time_last = rospy.Time.now()
+
         # since the first pt has been realized, iteration will start from the second pt 
         for traj_idx in range(len(self._time_list)-1):
             # a goal to be sent to action server
@@ -228,31 +229,37 @@ class Executor:
                 trajPt.positions.append(self._joints_pos_dict[joint_name][traj_idx+1])
                 trajPt.velocities.append(0.0)
             # time to reach the joint trajectory point specified to 1.0 since this will be controlled by my enter
-            trajPt.time_from_start = rospy.Duration(secs=1.0)
+            trajPt.time_from_start = rospy.Duration(secs=0.5)
             # add the joint trajectory point to the goal
             goal.trajectory.points.append(trajPt)
 
-            rospy.loginfo("At iteration {} goal has {} points to reach".format(traj_idx ,len(goal.trajectory.points)))
+            # rospy.loginfo("At iteration {} goal has {} points to reach".format(traj_idx ,len(goal.trajectory.points)))
 
-            rospy.loginfo("each of them is ")
+            # rospy.loginfo("each of them is ")
 
-            for traj_idx in range(len(goal.trajectory.points)):
-                print goal.trajectory.points[traj_idx]
+            for idx in range(len(goal.trajectory.points)):
+                print goal.trajectory.points[idx]
 
-            goal.trajectory.header.stamp = rospy.Time.now() + rospy.Duration(0.5)
+            goal.trajectory.header.stamp = rospy.Time.now()
 
             # send the goal to the action server
             self._action_client.send_goal(goal)
 
             # wait for the result
-            rospy.loginfo("Start waiting for go to other poses")
+            rospy.loginfo("Start waiting for go to the next pose")
             self._action_client.wait_for_result()
             rospy.loginfo("Waiting ends")
 
             # show the error code
             rospy.loginfo(self._action_client.get_result())
 
-            raw_input()
+            # show the time used to move to current position
+            time_next = rospy.Time.now()
+            rospy.loginfo("At iteration {}, time Duration is {}".format(traj_idx ,(time_next-time_last).to_sec()))
+            time_last = time_next
 
-    def compute(parameter_list):
+
+            # raw_input()
+
+    def compute_base_velocity(self):
         pass
