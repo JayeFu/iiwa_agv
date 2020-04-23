@@ -2,6 +2,9 @@
 
 import rospy
 
+# To store the pose of the car, including x, y, theta
+from geometry_msgs.msg import Pose2D
+
 # Brings in the SimpleActionClient
 import actionlib
 
@@ -26,24 +29,37 @@ class Executor:
         for idx in range(self._joint_num):
             self._joints_pos_dict['joint_a'+str(idx+1)]=list()
 
+        # a list containing the base's pose in Pose2D
+        self._base_pose_list = list()
+
         # a list containing the time series
         self._time_list = list()
 
         # action client
-        self._action_client = actionlib.SimpleActionClient(action_ns, FollowJointTrajectoryAction)
+        # self._action_client = actionlib.SimpleActionClient(action_ns, FollowJointTrajectoryAction)
 
         # wait for the action server until finally detecting
-        rospy.loginfo("Start waiting for the action server")
-        self._action_client.wait_for_server()
-        rospy.loginfo("Server detected")
+        #rospy.loginfo("Start waiting for the action server")
+        # self._action_client.wait_for_server()
+        # rospy.loginfo("Server detected")
 
     def read_trajectory(self):
         with open(self._file_path,'r') as f:
             for line in f.readlines()[1:]:
                 # convert string to float
                 time_slice = map(float,line.split())
+
                 # index 0 is time
                 self._time_list.append(time_slice[0])
+
+                # index 1, 2, 3 are x, y, theta
+                base_pose = Pose2D()
+                base_pose.x = time_slice[1]
+                base_pose.y = time_slice[2]
+                base_pose.theta = time_slice[3]
+                self._base_pose_list.append(base_pose)
+
+                # index from 4 to 10 are joint_a1 to joint_a7
                 for idx in range(self._joint_num):
                     # joint_a1 - time_slice[4]
                     # joint_a2 - time_slice[5]
@@ -237,3 +253,6 @@ class Executor:
             rospy.loginfo(self._action_client.get_result())
 
             raw_input()
+
+    def compute(parameter_list):
+        pass
