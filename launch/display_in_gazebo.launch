@@ -22,7 +22,7 @@
 
   <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
   <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
-    args="-urdf -model parallel_car -param robot_description"/>
+    args="-urdf -model fwx -param robot_description"/>
 
   <!-- ros_control iiwa_agv launch file -->
   <include file="$(find iiwa_agv)/launch/iiwa_agv_control.launch" />

@@ -35,7 +35,9 @@ class Executor:
 
         # a dictionary containing all the values of the joints in time series
         self._joints_pos_dict = dict()
-
+        self._joints_pos_dict['base_x']=list()
+        self._joints_pos_dict['x_y']=list()
+        self._joints_pos_dict['y_car']=list()
         for idx in range(self._joint_num):
             self._joints_pos_dict['joint_a'+str(idx+1)]=list()
 
@@ -72,6 +74,9 @@ class Executor:
                 base_pose.y = time_slice[2]
                 base_pose.theta = time_slice[3]
                 self._base_pose_list.append(base_pose)
+                self._joints_pos_dict['base_x'].append(time_slice[1])
+                self._joints_pos_dict['x_y'].append(time_slice[2])
+                self._joints_pos_dict['y_car'].append(time_slice[3])
 
                 # index from 4 to 10 are joint_a1 to joint_a7
                 for idx in range(self._joint_num):
@@ -89,18 +94,25 @@ class Executor:
 
         # a joint point in the trajectory
         trajPt = JointTrajectoryPoint()
+        goal.trajectory.joint_names.append('base_x')
+        goal.trajectory.joint_names.append('x_y')
+        goal.trajectory.joint_names.append('y_car')
+        trajPt.positions.append(self._joints_pos_dict['base_x'][0])
+        trajPt.positions.append(self._joints_pos_dict['x_y'][0])
+        trajPt.positions.append(self._joints_pos_dict['y_car'][0])
         for idx in range(self._joint_num): # for each joint 
             joint_name = "joint_a"+str(idx+1)
             goal.trajectory.joint_names.append(joint_name)
             trajPt.positions.append(self._joints_pos_dict[joint_name][0])
-            trajPt.velocities.append(0.0)
-        trajPt.time_from_start = rospy.Duration(secs=2.0)
+            #trajPt.velocities.append(0.0)
+        trajPt.time_from_start = rospy.Duration(secs=3.0)
 
         # add the joint trajectory point to the goal
         goal.trajectory.points.append(trajPt)
 
         # send the goal to the action server
         self._action_client.send_goal(goal)
+        #print(goal)
 
         # wait for the result
         rospy.loginfo("Start waiting for finishing initial pose")
@@ -121,6 +133,9 @@ class Executor:
         goal = FollowJointTrajectoryGoal()
 
         # add joint name
+        goal.trajectory.joint_names.append('base_x')
+        goal.trajectory.joint_names.append('x_y')
+        goal.trajectory.joint_names.append('y_car')
         for idx in range(self._joint_num): 
             goal.trajectory.joint_names.append("joint_a"+str(idx+1))
 
@@ -128,10 +143,13 @@ class Executor:
         for traj_idx in range(len(self._time_list)-1):
             # a joint point in the trajectory
             trajPt = JointTrajectoryPoint()
+            trajPt.positions.append(self._joints_pos_dict['base_x'][traj_idx+1])
+            trajPt.positions.append(self._joints_pos_dict['x_y'][traj_idx+1])
+            trajPt.positions.append(self._joints_pos_dict['y_car'][traj_idx+1])
             for idx in range(self._joint_num):
                 joint_name = "joint_a"+str(idx+1)
                 trajPt.positions.append(self._joints_pos_dict[joint_name][traj_idx+1])
-                trajPt.velocities.append(0.0)
+                #trajPt.velocities.append(0.0)
             # change the float time to duration
             sec=math.floor(self._time_list[traj_idx+1])
             nsec=(self._time_list[traj_idx+1]-sec)*10**9
@@ -174,11 +192,17 @@ class Executor:
 
         # a joint point in the trajectory
         trajPt = JointTrajectoryPoint()
+        goal.trajectory.joint_names.append('base_x')
+        goal.trajectory.joint_names.append('x_y')
+        goal.trajectory.joint_names.append('y_car')
+        trajPt.positions.append(self._joints_pos_dict['base_x'][-1])
+        trajPt.positions.append(self._joints_pos_dict['x_y'][-1])
+        trajPt.positions.append(self._joints_pos_dict['y_car'][-1])
         for idx in range(self._joint_num): # for each joint 
             joint_name = "joint_a"+str(idx+1)
             goal.trajectory.joint_names.append(joint_name)
             trajPt.positions.append(self._joints_pos_dict[joint_name][-1])
-            trajPt.velocities.append(0.0)
+            #trajPt.velocities.append(0.0)
         trajPt.time_from_start = rospy.Duration(secs=3.0)
 
         # add the joint trajectory point to the goal
@@ -210,10 +234,13 @@ class Executor:
 
         # a joint point in the trajectory
         trajPt = JointTrajectoryPoint()
+        goal.trajectory.joint_names.append('base_x')
+        goal.trajectory.joint_names.append('x_y')
+        goal.trajectory.joint_names.append('y_car')
         for idx in range(self._joint_num): # for each joint 
             joint_name = "joint_a"+str(idx+1)
             goal.trajectory.joint_names.append(joint_name)
-            trajPt.velocities.append(0.0)
+            #trajPt.velocities.append(0.0)
         trajPt.positions = target_joint_values
         trajPt.time_from_start = rospy.Duration(secs=3.0)
 
@@ -246,15 +273,21 @@ class Executor:
             goal = FollowJointTrajectoryGoal()
 
             # add joint name
+            goal.trajectory.joint_names.append('base_x')
+            goal.trajectory.joint_names.append('x_y')
+            goal.trajectory.joint_names.append('y_car')
             for idx in range(self._joint_num): 
                 goal.trajectory.joint_names.append("joint_a"+str(idx+1))
 
             # a joint point in the trajectory
             trajPt = JointTrajectoryPoint()
+            trajPt.positions.append(self._joints_pos_dict['base_x'][idx+1])
+            trajPt.positions.append(self._joints_pos_dict['x_y'][idx+1])
+            trajPt.positions.append(self._joints_pos_dict['y_car'][idx+1])
             for idx in range(self._joint_num):
                 joint_name = "joint_a"+str(idx+1)
                 trajPt.positions.append(self._joints_pos_dict[joint_name][traj_idx+1])
-                trajPt.velocities.append(0.0)
+                #trajPt.velocities.append(0.0)
             # time to reach the joint trajectory point specified to 1.0 since this will be controlled by my enter
             trajPt.time_from_start = rospy.Duration(secs=time_duration)
             # add the joint trajectory point to the goal
@@ -287,11 +320,9 @@ class Executor:
 
 
             # uncomment raw_input() if you want to control the pace of sending goals to the action server
-            #raw_input()
-
+            raw_input()
+    '''
     def send_base_vel(self):
-        '''send the base velociy command
-        '''
         rospy.sleep(1.0)#wait fot the arm to move together
         rate=rospy.Rate(self.vel_publish_rate)
         start_time=rospy.get_time()
@@ -317,4 +348,4 @@ class Executor:
                 self.vel_pub.publish(vel)
             rate.sleep()
         rospy.loginfo('base velocity command over')
-        
+    '''
