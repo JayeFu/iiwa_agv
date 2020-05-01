@@ -43,7 +43,7 @@ def main():
     # start a new node
     rospy.init_node("executor")
 
-    exe = Executor(file_path='/home/chen/ws_chen/src/hilsys/sim_sys/data/fwx_planned_trajectory.txt')
+    exe = Executor(file_path='/home/fjw/dual_ws/src/iiwa_agv/data/fwx_planned_trajectory_hou.txt')
 
     # read the joint trajectory from txt file
     exe.read_trajectory()
