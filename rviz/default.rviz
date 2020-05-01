@@ -118,7 +118,21 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        supportX_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        supportY_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         tool0:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        world:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -175,7 +189,13 @@ Visualization Manager:
           Value: true
         pan_link:
           Value: true
+        supportX_link:
+          Value: true
+        supportY_link:
+          Value: true
         tool0:
+          Value: true
+        world:
           Value: true
         xiangji_link:
           Value: true
@@ -189,31 +209,34 @@ Visualization Manager:
       Show Axes: true
       Show Names: true
       Tree:
-        agv_link:
-          base_link:
-            link_1:
-              link_2:
-                link_3:
-                  link_4:
-                    link_5:
-                      link_6:
-                        link_7:
-                          pan_link:
-                            xiangji_link:
-                              {}
-                            xiao_arm1_link:
-                              {}
-                            xiao_arm2_link:
-                              {}
-                          tool0:
-                            {}
+        world:
+          supportX_link:
+            supportY_link:
+              agv_link:
+                base_link:
+                  link_1:
+                    link_2:
+                      link_3:
+                        link_4:
+                          link_5:
+                            link_6:
+                              link_7:
+                                pan_link:
+                                  xiangji_link:
+                                    {}
+                                  xiao_arm1_link:
+                                    {}
+                                  xiao_arm2_link:
+                                    {}
+                                tool0:
+                                  {}
       Update Interval: 0
       Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
     Default Light: true
-    Fixed Frame: agv_link
+    Fixed Frame: world
     Frame Rate: 30
   Name: root
   Tools:
@@ -237,7 +260,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 2.22835373878479
+      Distance: 3.9271206855773926
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -252,10 +275,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.31039881706237793
+      Pitch: 0.2203989028930664
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 1.450373649597168
+      Yaw: 0.6753742098808289
     Saved: ~
 Window Geometry:
   Displays:
