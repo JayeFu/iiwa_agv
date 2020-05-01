@@ -43,7 +43,16 @@ def main():
     # start a new node
     rospy.init_node("executor")
 
+    rate = rospy.Rate(1.0)
+
     exe = Executor(file_path='/home/fjw/dual_ws/src/iiwa_agv/data/fwx_planned_trajectory_hou.txt')
+
+    # listen to initial offset until success
+    while not exe.listen_to_initial_offset():
+        rospy.logerr("Waiting for listening to initial offset")
+        rate.sleep()
+    
+    rospy.loginfo("Have successfully listened to initial offset")
 
     # read the joint trajectory from txt file
     exe.read_trajectory()

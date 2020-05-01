@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import rospy
+import tf2_ros
 
 # To store the pose of the car, including x, y, theta
 from geometry_msgs.msg import Pose2D
@@ -24,6 +25,11 @@ class Executor:
             file_path {str} -- the path of the joint trajectory file, if in this package, relative path is better (default: {'../data/fwx_planned_trajectory.txt'})
             action_ns {str} -- the action namespace, used for constructing the action client (default: {'/iiwa/iiwa_controller/follow_joint_trajectory'})
         """
+        
+        # tf series for listening
+        self._tfBuffer = tf2_ros.Buffer()
+        self._listener = tf2_ros.TransformListener(self._tfBuffer)
+        
         # file path
         self._file_path = file_path
 
@@ -47,6 +53,10 @@ class Executor:
         # a list containing the time series
         self._time_list = list()
 
+        # since have added x and y offest initially, we need to neutralize this in control
+        self._initial_x_offset = 0.0
+        self._initial_y_offset = 0.0
+
         # action client
         self._action_client = actionlib.SimpleActionClient(action_ns, FollowJointTrajectoryAction)
 
@@ -57,6 +67,19 @@ class Executor:
 
         self.vel_pub=rospy.Publisher('/base/cmd_vel',Twist,queue_size=10)
 
+    def listen_to_initial_offset(self):
+        try:
+            transform_stamped = self._tfBuffer.lookup_transform('world', 'virtual_base', rospy.Time())   
+        except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException):
+            rospy.logerr("Transform from world to virtual_base lookup exception")
+            return False
+        self._initial_x_offset = transform_stamped.transform.translation.x
+        self._initial_y_offset = transform_stamped.transform.translation.y
+        
+        rospy.loginfo("Initially at ({}, {})".format(self._initial_x_offset, self._initial_y_offset))
+        
+        return True
+    
     def read_trajectory(self):
         """Read time series, corresponding car pose and joint values at each time point
         """
@@ -74,8 +97,8 @@ class Executor:
                 base_pose.y = time_slice[2]
                 base_pose.theta = time_slice[3]
                 self._base_pose_list.append(base_pose)
-                self._joints_pos_dict['base_x'].append(time_slice[1])
-                self._joints_pos_dict['x_y'].append(time_slice[2])
+                self._joints_pos_dict['base_x'].append(time_slice[1]-self._initial_x_offset)
+                self._joints_pos_dict['x_y'].append(time_slice[2]-self._initial_y_offset)
                 self._joints_pos_dict['y_car'].append(time_slice[3])
 
                 # index from 4 to 10 are joint_a1 to joint_a7

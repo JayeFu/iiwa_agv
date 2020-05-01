@@ -75,12 +75,12 @@
         <axis xyz="-1.0 0.0 0.0"/>
         <limit lower="-5.0" upper="5.0" effort="50.0" velocity="2.0"/>
     </joint>
-    <joint name="${prefix}y_car" type="revolute">
+    <joint name="${prefix}y_car" type="continuous">
         <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
         <parent link="${prefix}virtual_y"/>
         <child link="${prefix}agv_link"/>
         <axis xyz="0.0 0.0 1.0"/>
-        <limit lower="${-PI}" upper="${PI}" effort="50.0" velocity="2.0"/>
+        <limit effort="50.0" velocity="2.0"/>
     </joint>
 
 
