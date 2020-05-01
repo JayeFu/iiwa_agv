@@ -7,6 +7,8 @@
   <xacro:property name="agv_mass" value="50.0" />
   <xacro:property name="xiao_arm_offset_x" value="0.15" />
   <xacro:property name="xiao_arm_offset_y" value="0.5" />
+  <xacro:property name="initial_x" value="0.0" />
+  <xacro:property name="initial_y" value="1.5" />
 
   <!-- include the xacro files-->
   <xacro:include filename="$(find iiwa_agv)/urdf/iiwa_agv.transmission.xacro"/>
@@ -26,6 +28,9 @@
 
 
   <!-- link list -->
+    
+    <link name="world"/>
+    
     <link name="${prefix}virtual_base">
         <inertial>
             <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
@@ -50,6 +55,12 @@
         </inertial>
     </link>
 
+    <joint name="world_base" type="fixed">
+      <origin xyz="${initial_x} ${initial_y} 0.0" rpy="0.0 0.0 0.0"/>
+      <parent link="world"/>
+      <child link="${prefix}virtual_base"/>
+    </joint>
+    
     <joint name="${prefix}base_x" type="prismatic">
         <origin xyz="0.0 0.0 0.18" rpy="0.0 0.0 0.0"/>
         <parent link="${prefix}virtual_base"/>
