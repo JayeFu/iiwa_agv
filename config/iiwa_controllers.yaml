@@ -6,6 +6,9 @@
     iiwa_controller:
       type: position_controllers/JointTrajectoryController
       joints:
+        - base_x
+        - x_y
+        - y_car
         - joint_a1
         - joint_a2
         - joint_a3

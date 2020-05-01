@@ -26,6 +26,53 @@
 
 
   <!-- link list -->
+    <link name="${prefix}virtual_base">
+        <inertial>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <mass value="1"/>
+            <inertia ixx="1" ixy="0.0" ixz="0.0" iyy="1" iyz="0.0" izz="1"/>
+        </inertial>
+    </link>
+
+    <link name="${prefix}virtual_x">
+        <inertial>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <mass value="1"/>
+            <inertia ixx="1" ixy="0.0" ixz="0.0" iyy="1" iyz="0.0" izz="1"/>
+        </inertial>
+    </link>
+
+    <link name="${prefix}virtual_y">
+        <inertial>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <mass value="1"/>
+            <inertia ixx="1" ixy="0.0" ixz="0.0" iyy="1" iyz="0.0" izz="1"/>
+        </inertial>
+    </link>
+
+    <joint name="${prefix}base_x" type="prismatic">
+        <origin xyz="0.0 0.0 0.18" rpy="0.0 0.0 0.0"/>
+        <parent link="${prefix}virtual_base"/>
+        <child link="${prefix}virtual_x"/>
+        <axis xyz="0.0 1.0 0.0"/>
+        <limit lower="-5.0" upper="5.0" effort="50.0" velocity="2.0"/>
+    </joint>
+    <joint name="${prefix}x_y" type="prismatic">
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        <parent link="${prefix}virtual_x"/>
+        <child link="${prefix}virtual_y"/>
+        <axis xyz="-1.0 0.0 0.0"/>
+        <limit lower="-5.0" upper="5.0" effort="50.0" velocity="2.0"/>
+    </joint>
+    <joint name="${prefix}y_car" type="revolute">
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        <parent link="${prefix}virtual_y"/>
+        <child link="${prefix}agv_link"/>
+        <axis xyz="0.0 0.0 1.0"/>
+        <limit lower="${-PI}" upper="${PI}" effort="50.0" velocity="2.0"/>
+    </joint>
+
+
 
   <link name="${prefix}agv_link">
     <inertial>
@@ -282,7 +329,7 @@
   <!-- joint list -->
 
   <joint name="${prefix}agv_to_base_joint" type="fixed">
-    <origin xyz="0 0 0.18" rpy="0 0 0" />
+    <origin xyz="0 0 0.18" rpy="0 0 ${PI}" />
     <parent link="${prefix}agv_link" />
     <child link="${prefix}base_link" />
   </joint>

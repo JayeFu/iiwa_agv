@@ -1,5 +1,32 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://wiki.ros.org/xacro">
+  <transmission name="trans01">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="${prefix}base_x">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor01">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="trans02">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="${prefix}x_y">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor02">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="trans03">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="${prefix}y_car">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor03">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
 
   <transmission name="trans1">
     <type>transmission_interface/SimpleTransmission</type>
