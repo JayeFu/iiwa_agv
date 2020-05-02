@@ -340,7 +340,7 @@
   <!-- joint list -->
 
   <joint name="${prefix}agv_to_base_joint" type="fixed">
-    <origin xyz="0 0 0.18" rpy="0 0 ${PI}" />
+    <origin xyz="0 0 0.18" rpy="0 0 0" />
     <parent link="${prefix}agv_link" />
     <child link="${prefix}base_link" />
   </joint>
