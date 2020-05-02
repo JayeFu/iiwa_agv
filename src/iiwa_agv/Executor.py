@@ -97,8 +97,8 @@ class Executor:
                 base_pose.y = time_slice[2]
                 base_pose.theta = time_slice[3]
                 self._base_pose_list.append(base_pose)
-                self._joints_pos_dict['base_x'].append(-time_slice[1]-self._initial_x_offset)
-                self._joints_pos_dict['x_y'].append(-time_slice[2]-self._initial_y_offset)
+                self._joints_pos_dict['base_x'].append(time_slice[1]-self._initial_x_offset)
+                self._joints_pos_dict['x_y'].append(time_slice[2]-self._initial_y_offset)
                 self._joints_pos_dict['y_car'].append(time_slice[3])
 
                 # index from 4 to 10 are joint_a1 to joint_a7

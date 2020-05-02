@@ -16,7 +16,7 @@ def main():
 
     rate = rospy.Rate(1.0)
 
-    exe = Executor(file_path='/home/fjw/dual_ws/src/iiwa_agv/data/fwx_planned_trajectory_hou.txt')
+    exe = Executor(file_path='/home/fjw/dual_ws/src/iiwa_agv/data/fwx_planned_trajectory_he.txt')
 
     # listen to initial offset until success
     while not exe.listen_to_initial_offset():
